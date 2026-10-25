@@ -3,30 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Walkie Friends - Talk with Friends</title>
+  <title>STRANGER COMMS - Hawkins 1983 Walkie-Talkie</title>
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700;900&family=VT323&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="stranger-theme">
+
+  <!-- Background Animated Upside Down Spores Particles -->
+  <div class="upside-down-overlay"></div>
+  <canvas id="sporesCanvas" class="spores-canvas"></canvas>
 
   <div class="app-container">
 
-    <!-- Top Navigation Bar -->
+    <!-- Top Stranger Things Header -->
     <header class="app-header">
       <div class="header-brand">
-        <span class="brand-icon">📻</span>
+        <img src="logo.svg" alt="Stranger Comms Logo" class="brand-logo-img">
         <div class="brand-text">
-          <h1>Walkie Friends</h1>
-          <span class="status-badge" id="netStatus"><span class="status-dot"></span> Online</span>
+          <div class="title-frame-top"></div>
+          <h1 class="stranger-title">STRANGER COMMS</h1>
+          <div class="title-frame-bottom"></div>
+          <span class="sub-motto">HAWKINS AV CLUB // 1983</span>
         </div>
       </div>
 
       <div class="header-controls">
-        <button id="btnShare" class="btn-pill btn-share" title="Invite friends to this channel">
+        <button id="btnShare" class="btn-pill btn-share" title="Invite friends to this frequency">
           <span>🔗</span> Invite
         </button>
-        <button id="btnProfile" class="btn-pill" title="Change your nickname">
-          <span class="user-avatar-mini" id="myAvatarMini">A</span>
-          <span id="myNameMini">Alex</span>
+        <button id="btnProfile" class="btn-pill" title="Change your codename">
+          <span class="user-avatar-mini" id="myAvatarMini">D</span>
+          <span id="myNameMini">Dustin</span>
         </button>
         <button id="btnSettings" class="btn-icon" title="Settings">
           ⚙️
@@ -34,84 +44,92 @@
       </div>
     </header>
 
-    <!-- Channel Selector Bar -->
+    <!-- 1980s Retro Radio Channel Bar (3-Digit Channels) -->
     <section class="channel-section">
       <div class="channel-card">
+        <div class="radio-speaker-slits">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+
         <div class="channel-top">
-          <button id="btnPrevChannel" class="channel-arrow" title="Previous Channel">◀</button>
+          <button id="btnPrevChannel" class="channel-arrow" title="Previous Frequency">◀</button>
           
           <div class="channel-info" id="btnChannelPicker">
-            <span class="channel-label">FREQUENCY / CHANNEL</span>
+            <span class="channel-label">FREQUENCY CHANNEL // 3-DIGIT</span>
             <div class="channel-name-row">
-              <h2 id="currentChannelName">Channel 1</h2>
+              <h2 id="currentChannelName">CH 011</h2>
               <span class="edit-channel-icon">✏️</span>
             </div>
+            <span class="channel-callsign" id="channelCallsignTag">ELEVEN // THE VOID</span>
           </div>
 
-          <button id="btnNextChannel" class="channel-arrow" title="Next Channel">▶</button>
+          <button id="btnNextChannel" class="channel-arrow" title="Next Frequency">▶</button>
         </div>
 
-        <!-- Privacy / PIN Lock Status -->
+        <!-- Confidential PIN Lock Status -->
         <div class="channel-privacy" id="btnTogglePin">
           <span class="lock-icon" id="lockIcon">🔓</span>
-          <span class="privacy-text" id="lockText">Public Channel (Tap to Lock with PIN)</span>
+          <span class="privacy-text" id="lockText">Open Frequency (Tap to Encrypt with PIN)</span>
         </div>
 
-        <!-- Quick Channel Chips (3-Digit Frequencies) -->
+        <!-- Quick 3-Digit Channel Chips (Iconic Stranger Things Channels) -->
         <div class="quick-channels">
-          <button class="chip active" data-ch="101">CH 101</button>
-          <button class="chip" data-ch="102">CH 102</button>
-          <button class="chip" data-ch="103">CH 103</button>
-          <button class="chip" data-ch="104">CH 104</button>
-          <button class="chip" data-ch="105">CH 105</button>
+          <button class="chip active" data-ch="011">CH 011 (El)</button>
+          <button class="chip" data-ch="101">CH 101 (Base)</button>
+          <button class="chip" data-ch="007">CH 007 (Lab)</button>
+          <button class="chip" data-ch="198">CH 198 (AV Club)</button>
+          <button class="chip" data-ch="666">CH 666 (Upside Down)</button>
           <button class="chip chip-add" id="btnCustomChannel">+ 3-Digit</button>
         </div>
       </div>
     </section>
 
-    <!-- Center Stage: Speaking Banner & PTT Button -->
+    <!-- Center Stage: Hawkins Walkie-Talkie Push-To-Talk -->
     <main class="talk-stage">
 
-      <!-- Real-Time Voice Activity Banner -->
+      <!-- Real-Time Voice Activity CRT Banner -->
       <div class="talk-status-banner" id="talkBanner">
         <div class="status-indicator-dot"></div>
-        <span id="talkBannerText">Ready to talk</span>
+        <span id="talkBannerText">RADIO SILENCE // DO YOU COPY?</span>
       </div>
 
-      <!-- Giant Circular Push-To-Talk Button -->
+      <!-- Giant 1980s Realistic TRC-214 Style PTT Button -->
       <div class="ptt-container">
-        <!-- Audio Waves Pulse Ring -->
         <div class="pulse-ring" id="pulseRing"></div>
         <div class="pulse-ring ring-2" id="pulseRing2"></div>
 
         <button id="btnPtt" class="main-ptt-button" title="Press & Hold to talk, or hold SPACEBAR">
+          <div class="radio-antenna-stub">
+            <div class="antenna-core"></div>
+            <div class="antenna-glow-dot"></div>
+          </div>
           <div class="ptt-icon-wrap">
             <span class="ptt-mic-icon">🎙️</span>
           </div>
           <span class="ptt-main-label" id="pttMainLabel">HOLD TO TALK</span>
-          <span class="ptt-sub-label">or press [SPACE]</span>
+          <span class="ptt-sub-label">DO YOU COPY? [SPACE]</span>
         </button>
       </div>
 
-      <!-- Hands-Free Mic Lock Toggle -->
+      <!-- Secondary Retro Controls: Hands-Free Lock & Walkie Squelch Beeps -->
       <div class="ptt-secondary-controls">
-        <button id="btnLockMic" class="btn-lock-mic" title="Lock mic on for hands-free chatting">
+        <button id="btnLockMic" class="btn-lock-mic" title="Lock mic on for hands-free operations">
           <span class="lock-led" id="lockLed"></span>
           <span id="lockMicText">Hands-Free: OFF</span>
         </button>
 
-        <button id="btnBeepToggle" class="btn-sub-toggle" title="Toggle walkie-talkie chirp sound effects">
-          <span>🔊</span> <span id="beepToggleText">Beeps: ON</span>
+        <button id="btnBeepToggle" class="btn-sub-toggle" title="Toggle 1980s Radio Squelch & Roger Beeps">
+          <span>🔊</span> <span id="beepToggleText">Squelch FX: ON</span>
         </button>
       </div>
 
     </main>
 
-    <!-- Friends In Channel List -->
+    <!-- Hawkins AV Club Member Radio Transceivers (Friends In Channel) -->
     <section class="friends-section">
       <div class="section-header">
-        <h3>Friends in Channel (<span id="friendCount">1</span>)</h3>
-        <span class="security-badge" id="securityBadge">🌐 Open</span>
+        <h3>AV Club Radios (<span id="friendCount">1</span>)</h3>
+        <span class="security-badge" id="securityBadge">🌐 Open Radio</span>
       </div>
 
       <div class="friends-list" id="friendsList">
@@ -127,55 +145,55 @@
   <div class="modal-backdrop" id="modalPin">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3>🔒 Channel Privacy PIN</h3>
+        <h3>🔒 Encrypted Frequency PIN</h3>
         <button class="btn-close" id="btnClosePinModal">&times;</button>
       </div>
       <div class="modal-body">
         <p class="modal-desc">
-          Set a secret PIN or password. Anyone entering this channel must have the same PIN to hear and talk with you. Transmissions are encrypted end-to-end.
+          Lock this channel from the Soviets and the Lab! Only operators with this secret PIN can hear transmissions. Voice packets are AES-GCM encrypted.
         </p>
 
         <div class="form-group">
-          <label>Secret Channel PIN / Code:</label>
-          <input type="text" id="inputChannelPin" placeholder="e.g. 1234 or SECRET" maxlength="20" autocomplete="off">
+          <label>Secret Frequency PIN / Passcode:</label>
+          <input type="text" id="inputChannelPin" placeholder="e.g. 1983 or HOPPER" maxlength="20" autocomplete="off">
         </div>
 
         <div class="modal-buttons">
           <button id="btnRemovePin" class="btn-secondary">Make Public</button>
-          <button id="btnSavePin" class="btn-primary">Set Private PIN</button>
+          <button id="btnSavePin" class="btn-primary">Encrypt Frequency</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 2. Custom Channel / Frequency Modal (3-Digit Only) -->
+  <!-- 2. Custom 3-Digit Channel Modal -->
   <div class="modal-backdrop" id="modalChannelPicker">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3>📡 Switch 3-Digit Channel</h3>
+        <h3>📡 Switch 3-Digit Frequency</h3>
         <button class="btn-close" id="btnCloseChannelModal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label>Enter 3-Digit Channel Number (001 - 999):</label>
-          <input type="number" id="inputCustomChannel" placeholder="e.g. 101, 555, 999" min="1" max="999" maxlength="3" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);">
+          <label>Enter 3-Digit Frequency (001 - 999):</label>
+          <input type="number" id="inputCustomChannel" placeholder="e.g. 011, 101, 666" min="1" max="999" maxlength="3" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);">
         </div>
 
         <div class="suggested-channels">
-          <span class="suggested-title">Quick 3-Digit Channels:</span>
+          <span class="suggested-title">Hawkins Iconic Frequencies:</span>
           <div class="suggested-chips">
-            <button class="chip" data-choose="100">CH 100</button>
-            <button class="chip" data-choose="200">CH 200</button>
-            <button class="chip" data-choose="333">CH 333</button>
-            <button class="chip" data-choose="404">CH 404</button>
-            <button class="chip" data-choose="505">CH 505</button>
-            <button class="chip" data-choose="777">CH 777</button>
-            <button class="chip" data-choose="999">CH 999</button>
+            <button class="chip" data-choose="011">CH 011 (Eleven)</button>
+            <button class="chip" data-choose="101">CH 101 (Mike's Base)</button>
+            <button class="chip" data-choose="007">CH 007 (Hawkins Lab)</button>
+            <button class="chip" data-choose="198">CH 198 (AV Club)</button>
+            <button class="chip" data-choose="505">CH 505 (Starcourt)</button>
+            <button class="chip" data-choose="666">CH 666 (Upside Down)</button>
+            <button class="chip" data-choose="777">CH 777 (Cerebro)</button>
           </div>
         </div>
 
         <div class="modal-buttons">
-          <button id="btnApplyChannel" class="btn-primary full-width">Tune to Channel</button>
+          <button id="btnApplyChannel" class="btn-primary full-width">Tune to Frequency</button>
         </div>
       </div>
     </div>
@@ -185,12 +203,12 @@
   <div class="modal-backdrop" id="modalShare">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3>🔗 Invite Friends to Channel</h3>
+        <h3>🔗 Call Hawkins AV Club</h3>
         <button class="btn-close" id="btnCloseShareModal">&times;</button>
       </div>
       <div class="modal-body text-center">
         <p class="modal-desc">
-          Share this direct link with your friends. When they click it, they will automatically join your channel!
+          Share this direct radio link with your friends to establish contact on this 3-digit frequency!
         </p>
 
         <div class="share-box">
@@ -199,8 +217,14 @@
         </div>
 
         <div class="qr-box">
-          <p class="qr-desc">Or scan with smartphone camera on Wi-Fi:</p>
+          <p class="qr-desc">Or scan with phone camera to join frequency:</p>
           <img id="shareQrCode" alt="QR Code" class="qr-img">
+        </div>
+
+        <div class="apk-download-box" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border);">
+          <a href="/WalkieFriends.apk" download="WalkieFriends.apk" class="btn-stranger-apk" style="display: block; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 900; color: #fff; background: linear-gradient(135deg, #e71923 0%, #880910 100%); border: 2px solid #ff2a3b; letter-spacing: 1px; box-shadow: 0 0 15px rgba(231,25,35,0.5);">
+            📲 DOWNLOAD STRANGER COMMS APK
+          </a>
         </div>
       </div>
     </div>
@@ -210,21 +234,21 @@
   <div class="modal-backdrop" id="modalSettings">
     <div class="modal-sheet">
       <div class="modal-header">
-        <h3>⚙️ Settings & Profile</h3>
+        <h3>⚙️ Transceiver Settings</h3>
         <button class="btn-close" id="btnCloseSettingsModal">&times;</button>
       </div>
       <div class="modal-body">
         
         <div class="form-group">
-          <label>Your Name:</label>
+          <label>Your Codename (e.g. Dustin, Lucas, Eleven, Hopper):</label>
           <div class="input-inline">
-            <input type="text" id="inputUserName" maxlength="16" placeholder="Your name">
+            <input type="text" id="inputUserName" maxlength="16" placeholder="Your codename">
             <button id="btnSaveName" class="btn-primary">Save</button>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Choose Avatar Color:</label>
+          <label>Avatar Glow Color:</label>
           <div class="avatar-colors" id="avatarColorPicker">
             <!-- Populated dynamically -->
           </div>
@@ -232,14 +256,20 @@
 
         <div class="form-group switch-group">
           <div>
-            <label>Walkie-Talkie Sound FX</label>
-            <small>Play authentic radio beeps when talking</small>
+            <label>1980s Squelch & Roger Beeps</label>
+            <small>Authentic radio static burst on transmit cutoff</small>
           </div>
           <input type="checkbox" id="chkSoundFx" checked>
         </div>
 
         <div class="form-group">
-          <button id="btnTestMic" class="btn-secondary full-width">🎤 Test My Microphone</button>
+          <button id="btnTestMic" class="btn-secondary full-width">🎤 Test Radio Microphone</button>
+        </div>
+
+        <div class="apk-download-box" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border);">
+          <a href="/WalkieFriends.apk" download="WalkieFriends.apk" class="btn-stranger-apk" style="display: block; text-decoration: none; padding: 12px; border-radius: 10px; font-weight: 900; text-align: center; color: #fff; background: linear-gradient(135deg, #e71923 0%, #880910 100%); border: 2px solid #ff2a3b; letter-spacing: 1px; box-shadow: 0 0 15px rgba(231,25,35,0.5);">
+            📲 DOWNLOAD STRANGER COMMS APK
+          </a>
         </div>
 
       </div>
@@ -250,5 +280,59 @@
   <script src="js/crypto.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    // Upside Down Spores Floating Particle Canvas
+    (function initSpores() {
+      const canvas = document.getElementById('sporesCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const spores = [];
+      const sporeCount = 45;
+
+      for (let i = 0; i < sporeCount; i++) {
+        spores.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2.5 + 0.5,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: Math.random() * 0.6 + 0.2, // Drifting down like ash/spores in the Upside Down
+          alpha: Math.random() * 0.6 + 0.2,
+          pulse: Math.random() * Math.PI
+        });
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, w, h);
+
+        for (let s of spores) {
+          s.x += s.vx + Math.sin(s.pulse) * 0.3;
+          s.y += s.vy;
+          s.pulse += 0.02;
+
+          if (s.y > h) { s.y = -5; s.x = Math.random() * w; }
+          if (s.x > w) s.x = 0;
+          if (s.x < 0) s.x = w;
+
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(231, 25, 35, ${s.alpha * 0.8})`;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff2a3b';
+          ctx.fill();
+        }
+
+        requestAnimationFrame(render);
+      }
+      render();
+    })();
+  </script>
 </body>
 </html>

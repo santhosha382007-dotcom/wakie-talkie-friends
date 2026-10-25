@@ -156,6 +156,8 @@ class SimpleAudio {
   playRogerBeep() {
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
+
+    // Vintage Roger Beep Tone (1150 Hz)
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.frequency.setValueAtTime(1150, now);
@@ -166,6 +168,36 @@ class SimpleAudio {
     gain.connect(this.masterGain);
     osc.start(now);
     osc.stop(now + 0.11);
+
+    // 1980s Analog Squelch Tail Noise Burst ("ksshh-chk")
+    setTimeout(() => {
+      if (!this.ctx) return;
+      const t = this.ctx.currentTime;
+      const bufferSize = this.ctx.sampleRate * 0.08;
+      const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+
+      const whiteNoise = this.ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1600;
+
+      const noiseGain = this.ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.2, t);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+
+      whiteNoise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(this.masterGain);
+
+      whiteNoise.start(t);
+      whiteNoise.stop(t + 0.08);
+    }, 90);
   }
 
   getAudioLevel() {

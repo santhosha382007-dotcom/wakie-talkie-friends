@@ -65,21 +65,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   const chkSoundFx = document.getElementById('chkSoundFx');
   const btnTestMic = document.getElementById('btnTestMic');
 
+  // Iconic Stranger Things Frequency Tag Names
+  const STRANGER_CHANNELS = {
+    '011': 'ELEVEN // THE VOID',
+    '101': "MIKE'S BASEMENT",
+    '007': 'HAWKINS LAB',
+    '198': 'HAWKINS AV CLUB 1983',
+    '505': 'STARCOURT MALL',
+    '666': 'THE UPSIDE DOWN // VECNA',
+    '777': 'CEREBRO LONG-RANGE TOWER'
+  };
+
+  const HAWKINS_NAMES = ['Dustin', 'Lucas', 'Mike', 'Eleven', 'Will', 'Max', 'Hopper', 'Steve', 'Robin'];
+
   // Helper to format channel as strictly 3-digit number (001 - 999)
   function formatChannel(ch) {
     const num = parseInt(ch, 10);
-    if (isNaN(num) || num < 1) return '101';
+    if (isNaN(num) || num < 1) return '011';
     const clamped = Math.max(1, Math.min(999, num));
     return String(clamped).padStart(3, '0');
   }
 
   // State Variables
   const urlParams = new URLSearchParams(window.location.search);
-  const rawCh = urlParams.get('ch') || urlParams.get('channel') || localStorage.getItem('wf_channel') || '101';
+  const rawCh = urlParams.get('ch') || urlParams.get('channel') || localStorage.getItem('wf_channel') || '011';
   let activeChannel = formatChannel(rawCh);
   let activePin = urlParams.get('pin') || localStorage.getItem('wf_pin') || '';
-  let userName = localStorage.getItem('wf_name') || 'Friend ' + Math.floor(10 + Math.random() * 90);
-  let userAvatarColor = localStorage.getItem('wf_avatar_color') || '#10b981';
+  let userName = localStorage.getItem('wf_name') || HAWKINS_NAMES[Math.floor(Math.random() * HAWKINS_NAMES.length)];
+  let userAvatarColor = localStorage.getItem('wf_avatar_color') || '#e71923';
 
   let myId = null;
   let isTalking = false;
@@ -90,8 +103,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   let ws = null;
   let seqCounter = 0;
 
-  // Colors available for avatar
-  const AVATAR_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
+  // Colors available for avatar (Stranger Things Palette)
+  const AVATAR_COLORS = ['#e71923', '#ff2a3b', '#ffaa00', '#00e5ff', '#9b59b6', '#ff4757', '#ffa502'];
 
   // ==========================================
   // INITIALIZATION
@@ -233,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     pttContainer.classList.add('active');
     pttMainLabel.textContent = 'TRANSMITTING...';
     talkBanner.className = 'talk-status-banner transmitting';
-    talkBannerText.textContent = '🔴 You are talking...';
+    talkBannerText.textContent = '🔴 TRANSMITTING TO THE UPSIDE DOWN...';
 
     const ok = await window.simpleAudio.startTalking();
     if (!ok) {
@@ -256,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     pttContainer.classList.remove('active');
     pttMainLabel.textContent = 'HOLD TO TALK';
     talkBanner.className = 'talk-status-banner';
-    talkBannerText.textContent = 'Ready to talk';
+    talkBannerText.textContent = 'RADIO SILENCE // DO YOU COPY?';
 
     window.simpleAudio.stopTalking();
 
@@ -344,11 +357,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (isReceiving) {
       talkBanner.className = 'talk-status-banner receiving';
-      talkBannerText.textContent = `🟢 ${speakerName} is talking...`;
+      talkBannerText.textContent = `🟢 ${speakerName.toUpperCase()} IS CALLING... DO YOU COPY?`;
       pttMainLabel.textContent = 'LISTENING...';
     } else {
       talkBanner.className = 'talk-status-banner';
-      talkBannerText.textContent = 'Ready to talk';
+      talkBannerText.textContent = 'RADIO SILENCE // DO YOU COPY?';
       pttMainLabel.textContent = 'HOLD TO TALK';
     }
 
@@ -371,17 +384,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function updateChannelUI() {
-    currentChannelName.textContent = `Channel ${activeChannel}`;
+    currentChannelName.textContent = `CH ${activeChannel}`;
     localStorage.setItem('wf_channel', activeChannel);
     localStorage.setItem('wf_pin', activePin);
+
+    // Update callsign tag
+    const channelCallsignTag = document.getElementById('channelCallsignTag');
+    if (channelCallsignTag) {
+      channelCallsignTag.textContent = STRANGER_CHANNELS[activeChannel] || 'HAWKINS AV SECTOR ' + activeChannel;
+    }
 
     // Update PIN lock status
     const isLocked = activePin.length > 0;
     btnTogglePin.classList.toggle('locked', isLocked);
     lockIcon.textContent = isLocked ? '🔒' : '🔓';
-    lockText.textContent = isLocked ? `Private PIN: ${activePin}` : 'Public Channel (Tap to Lock with PIN)';
-    securityBadge.textContent = isLocked ? '🔒 Private' : '🌐 Open';
-    securityBadge.style.color = isLocked ? '#f59e0b' : '#10b981';
+    lockText.textContent = isLocked ? `Encrypted PIN: ${activePin}` : 'Open Frequency (Tap to Encrypt with PIN)';
+    securityBadge.textContent = isLocked ? '🔒 Encrypted' : '🌐 Open Radio';
+    securityBadge.style.color = isLocked ? '#ffaa00' : '#ff2a3b';
 
     // Highlight chip if matching 3-digit number
     quickChips.forEach(chip => {
