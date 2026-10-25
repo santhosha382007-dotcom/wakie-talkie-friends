@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Walkie Friends - Talk with Friends</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-brand">
+        <span class="brand-icon">📻</span>
+        <div class="brand-text">
+          <h1>Walkie Friends</h1>
+          <span class="status-badge" id="netStatus"><span class="status-dot"></span> Online</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <button id="btnShare" class="btn-pill btn-share" title="Invite friends to this channel">
+          <span>🔗</span> Invite
+        </button>
+        <button id="btnProfile" class="btn-pill" title="Change your nickname">
+          <span class="user-avatar-mini" id="myAvatarMini">A</span>
+          <span id="myNameMini">Alex</span>
+        </button>
+        <button id="btnSettings" class="btn-icon" title="Settings">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- Channel Selector Bar -->
+    <section class="channel-section">
+      <div class="channel-card">
+        <div class="channel-top">
+          <button id="btnPrevChannel" class="channel-arrow" title="Previous Channel">◀</button>
+          
+          <div class="channel-info" id="btnChannelPicker">
+            <span class="channel-label">FREQUENCY / CHANNEL</span>
+            <div class="channel-name-row">
+              <h2 id="currentChannelName">Channel 1</h2>
+              <span class="edit-channel-icon">✏️</span>
+            </div>
+          </div>
+
+          <button id="btnNextChannel" class="channel-arrow" title="Next Channel">▶</button>
+        </div>
+
+        <!-- Privacy / PIN Lock Status -->
+        <div class="channel-privacy" id="btnTogglePin">
+          <span class="lock-icon" id="lockIcon">🔓</span>
+          <span class="privacy-text" id="lockText">Public Channel (Tap to Lock with PIN)</span>
+        </div>
+
+        <!-- Quick Channel Chips (3-Digit Frequencies) -->
+        <div class="quick-channels">
+          <button class="chip active" data-ch="101">CH 101</button>
+          <button class="chip" data-ch="102">CH 102</button>
+          <button class="chip" data-ch="103">CH 103</button>
+          <button class="chip" data-ch="104">CH 104</button>
+          <button class="chip" data-ch="105">CH 105</button>
+          <button class="chip chip-add" id="btnCustomChannel">+ 3-Digit</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Stage: Speaking Banner & PTT Button -->
+    <main class="talk-stage">
+
+      <!-- Real-Time Voice Activity Banner -->
+      <div class="talk-status-banner" id="talkBanner">
+        <div class="status-indicator-dot"></div>
+        <span id="talkBannerText">Ready to talk</span>
+      </div>
+
+      <!-- Giant Circular Push-To-Talk Button -->
+      <div class="ptt-container">
+        <!-- Audio Waves Pulse Ring -->
+        <div class="pulse-ring" id="pulseRing"></div>
+        <div class="pulse-ring ring-2" id="pulseRing2"></div>
+
+        <button id="btnPtt" class="main-ptt-button" title="Press & Hold to talk, or hold SPACEBAR">
+          <div class="ptt-icon-wrap">
+            <span class="ptt-mic-icon">🎙️</span>
+          </div>
+          <span class="ptt-main-label" id="pttMainLabel">HOLD TO TALK</span>
+          <span class="ptt-sub-label">or press [SPACE]</span>
+        </button>
+      </div>
+
+      <!-- Hands-Free Mic Lock Toggle -->
+      <div class="ptt-secondary-controls">
+        <button id="btnLockMic" class="btn-lock-mic" title="Lock mic on for hands-free chatting">
+          <span class="lock-led" id="lockLed"></span>
+          <span id="lockMicText">Hands-Free: OFF</span>
+        </button>
+
+        <button id="btnBeepToggle" class="btn-sub-toggle" title="Toggle walkie-talkie chirp sound effects">
+          <span>🔊</span> <span id="beepToggleText">Beeps: ON</span>
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Friends In Channel List -->
+    <section class="friends-section">
+      <div class="section-header">
+        <h3>Friends in Channel (<span id="friendCount">1</span>)</h3>
+        <span class="security-badge" id="securityBadge">🌐 Open</span>
+      </div>
+
+      <div class="friends-list" id="friendsList">
+        <!-- Friend cards populated dynamically -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Channel PIN / Password Modal (Confidentiality) -->
+  <div class="modal-backdrop" id="modalPin">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>🔒 Channel Privacy PIN</h3>
+        <button class="btn-close" id="btnClosePinModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Set a secret PIN or password. Anyone entering this channel must have the same PIN to hear and talk with you. Transmissions are encrypted end-to-end.
+        </p>
+
+        <div class="form-group">
+          <label>Secret Channel PIN / Code:</label>
+          <input type="text" id="inputChannelPin" placeholder="e.g. 1234 or SECRET" maxlength="20" autocomplete="off">
+        </div>
+
+        <div class="modal-buttons">
+          <button id="btnRemovePin" class="btn-secondary">Make Public</button>
+          <button id="btnSavePin" class="btn-primary">Set Private PIN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Custom Channel / Frequency Modal (3-Digit Only) -->
+  <div class="modal-backdrop" id="modalChannelPicker">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>📡 Switch 3-Digit Channel</h3>
+        <button class="btn-close" id="btnCloseChannelModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Enter 3-Digit Channel Number (001 - 999):</label>
+          <input type="number" id="inputCustomChannel" placeholder="e.g. 101, 555, 999" min="1" max="999" maxlength="3" oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);">
+        </div>
+
+        <div class="suggested-channels">
+          <span class="suggested-title">Quick 3-Digit Channels:</span>
+          <div class="suggested-chips">
+            <button class="chip" data-choose="100">CH 100</button>
+            <button class="chip" data-choose="200">CH 200</button>
+            <button class="chip" data-choose="333">CH 333</button>
+            <button class="chip" data-choose="404">CH 404</button>
+            <button class="chip" data-choose="505">CH 505</button>
+            <button class="chip" data-choose="777">CH 777</button>
+            <button class="chip" data-choose="999">CH 999</button>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="btnApplyChannel" class="btn-primary full-width">Tune to Channel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Invite Friends / Share Link Modal -->
+  <div class="modal-backdrop" id="modalShare">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>🔗 Invite Friends to Channel</h3>
+        <button class="btn-close" id="btnCloseShareModal">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="modal-desc">
+          Share this direct link with your friends. When they click it, they will automatically join your channel!
+        </p>
+
+        <div class="share-box">
+          <input type="text" id="inputShareLink" readonly>
+          <button id="btnCopyLink" class="btn-primary">COPY LINK</button>
+        </div>
+
+        <div class="qr-box">
+          <p class="qr-desc">Or scan with smartphone camera on Wi-Fi:</p>
+          <img id="shareQrCode" alt="QR Code" class="qr-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Settings & Profile Modal -->
+  <div class="modal-backdrop" id="modalSettings">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3>⚙️ Settings & Profile</h3>
+        <button class="btn-close" id="btnCloseSettingsModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label>Your Name:</label>
+          <div class="input-inline">
+            <input type="text" id="inputUserName" maxlength="16" placeholder="Your name">
+            <button id="btnSaveName" class="btn-primary">Save</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Choose Avatar Color:</label>
+          <div class="avatar-colors" id="avatarColorPicker">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <div class="form-group switch-group">
+          <div>
+            <label>Walkie-Talkie Sound FX</label>
+            <small>Play authentic radio beeps when talking</small>
+          </div>
+          <input type="checkbox" id="chkSoundFx" checked>
+        </div>
+
+        <div class="form-group">
+          <button id="btnTestMic" class="btn-secondary full-width">🎤 Test My Microphone</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/crypto.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
